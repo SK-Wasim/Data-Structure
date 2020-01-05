@@ -1,0 +1,64 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApplication2
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            while(true)
+            {
+                string morn = Console.ReadLine();
+                string[] spilmorn = morn.Split(' ');
+                double[] spilmorndoub = new double[spilmorn.Length];
+                for (int i = 0; i < spilmorn.Length; i++)
+                {
+                    spilmorndoub[i] = double.Parse(spilmorn[i]);
+                }
+                if (spilmorndoub[0] == 0 && spilmorndoub[1] == 0)
+                {
+                    break;
+                }
+                int length = int.Parse((spilmorndoub[1]).ToString());
+                string[,] keycombinit = new string[(length+1),1];
+                for (int i = 0; i < keycombinit.GetLength(0); i++)
+                {
+                    keycombinit[i,0] = Console.ReadLine();
+                }
+
+                double[,] keycomb = new double[(length + 1), int.Parse((spilmorndoub[0]).ToString())];
+                for (int i = 0; i < keycomb.GetLength(0); i++)
+                {
+                    string[] temp = keycombinit[i, 0].Split(' ');
+                    for (int j = 0; j < keycomb.GetLength(1); j++)
+                    {
+                        keycomb[i, j] = double.Parse(temp[j].ToString());
+                    }
+                }
+
+                int totcomb = 0;
+                for (int i = 1; i < keycomb.GetLength(0); i++)
+                {
+                    int count = 0;
+                    totcomb = 0;
+                    for (int j = 0; j < keycomb.GetLength(1); j++)
+                    {
+                        if (keycomb[0, j] > keycomb[i, j] && (keycomb[0, j] - (keycomb[i, j])) <= 9 )
+                        {
+                            count++;
+                        }
+                    }
+                    if(count > 0)
+                    {
+                        totcomb++;
+                    }
+                }
+                Console.WriteLine(totcomb);
+            }
+        }
+    }
+}
