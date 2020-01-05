@@ -1,0 +1,68 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp4
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int n = int.Parse(Console.ReadLine());
+            string[] arr = new string[n];
+            string[,] arr2 = new string[n,n];
+            for (int i = 0; i < n; i++)
+            {
+                arr[i] = Console.ReadLine();
+                string[] arr3 = arr[i].Split(' ');
+                for (int j = 0; j < arr3.Length; j++)
+                {
+                    arr2[i, j] = arr3[j];
+                }
+            }
+
+            for (int i = 0; i < arr2.GetLength(0); i++)
+            {
+                for (int j = 0; j < arr2.GetLength(1); j++)
+                {
+                    Console.Write(arr2[i,j]+" ");
+                }
+                Console.WriteLine();
+            }
+
+            while(true)
+            { 
+                int k = int.Parse(Console.ReadLine());
+                if (k == 0)
+                {
+                    break;
+                }
+                Console.WriteLine("Symmetric Diagonals "+k);
+                if (k < n)
+                {
+                    k--;
+                    for (int i = 0; i < arr2.GetLength(0) - k; i++)
+                    {
+                        Console.Write(arr2[i, i + k]);
+                    }
+                    Console.WriteLine();
+                    for (int i = 0; i < arr2.GetLength(0) - k; i++)
+                    {
+                        if (k == 0)
+                        {
+                            break;
+                        }
+                        Console.Write(arr2[i + k, i]);
+                    }
+                    Console.WriteLine();
+                }
+                else
+                {
+                    Console.WriteLine("You Entered a wrong value");
+                }
+            }
+        }
+    }
+}
