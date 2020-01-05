@@ -1,0 +1,162 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Dijkstra_Algorithm_DM
+{
+    class Program
+    {
+        class Edge
+        {
+            public string u;
+            public string v;
+            public int w;
+            public Edge(string _u , string _v, string _w)
+            {
+                u = _u;
+                v = _v;
+                w = int.Parse(_w);
+            }
+        }
+
+        class graph
+        {
+            List<Edge> edges;
+            List<string> vertices;
+
+            public graph(string path)
+            {
+                string[] data = System.IO.File.ReadAllLines(path);
+                edges = new List<Edge>();
+                vertices = new List<string>();
+                foreach (var line in data)
+                {
+                    string[] s = line.Split(' ');
+                    edges.Add(new Edge(s[0], s[1], s[2]));
+                    edges.Add(new Edge(s[1], s[0], s[2]));
+                    if(!vertices.Contains(s[0]))
+                    {
+                        vertices.Add(s[0]);
+                    }
+                    if (!vertices.Contains(s[1]))
+                    {
+                        vertices.Add(s[1]);
+                    }
+                }
+            }
+
+            public void dijkstra()
+            {
+                Console.Write("Enter Source : ");
+                string source = Console.ReadLine();
+                Console.Write("Enter Destination : ");
+                string goal = Console.ReadLine();
+                List<string> Q = new List<string>();
+                Dictionary<string, int> dist = new Dictionary<string, int>();
+                Dictionary<string, string> prev = new Dictionary<string, string>();
+                int infinity = edges.Max(p => p.w) + 1000;
+
+                foreach (var v in vertices)
+                {
+                    dist.Add(v, infinity);
+                    prev.Add(v,null);
+                    Q.Add(v);
+                }
+
+                dist[source] = 0;
+                while(Q.Count != 0)
+                {
+                    var t = dist.Where(p => Q.Contains(p.Key));
+                    int min = t.Min(p => p.Value);
+                    string u = t.Where(p => p.Value == min).Select(p => p.Key).First();
+                    Q.Remove(u);
+                    List<Edge> ds = edges.Where(p => p.u == u && Q.Contains(p.v)).ToList();
+                    foreach (Edge i in ds)
+                    {
+                        int alt = dist[u] + i.w;
+                        if(alt < dist[i.v])
+                        {
+                            dist[i.v] = alt;
+                            prev[i.v] = u;
+                        }
+                    }
+                }
+
+                Console.WriteLine("Distance from {0} to : ",source);
+                foreach (var item in dist)
+                {
+                    Console.WriteLine(item.Key + "\t" + item.Value);
+                }
+
+                Console.WriteLine("Shortest Path {0} to {1} ", source,goal);
+                //foreach (var item in prev)
+                //{
+                //    Console.WriteLine(item.Key + "\t" + item.Value);
+                //}
+
+                string path = "";
+                string pathsrc = goal;
+                for (int i = 0; i < prev.Count; i++)
+                {
+                    string x = "";
+                    foreach (var item in prev)
+                    {
+                        if(item.Key == pathsrc)
+                        {
+                            x = item.Value;
+                        }
+                    }
+                    if(x == null)
+                    {
+                        continue;
+                    }
+                    pathsrc = x;
+                    if(!path.Contains(x))
+                    {
+                        path = path + ">--" + x;
+                    }
+                }
+                path = goal + path;
+                char[] arr = path.ToCharArray();
+                Array.Reverse(arr);
+                path = new string(arr);
+                Console.WriteLine(path);
+                //foreach (var item in prev)
+                //{
+                //    if(item.Value == null)
+                //    {
+                //        continue;
+                //    }
+                //    if (item.Key == goal)
+                //    {
+                //        if (!a.Contains(item.Value))
+                //        {
+                //            a = a + item.Value + "-->" + item.Key ;
+                //            break;
+                //        }
+                //        else
+                //        {
+                //            a = a + item.Key;
+                //            break;
+                //        }
+                //    }
+                //    else
+                //    {
+                //        if (!a.Contains(item.Value))
+                //        {
+                //            a = a + item.Value + "-->";
+                //        }
+                //    }
+                //}
+            }
+        }
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Dijkstra(Find the Shortest Path)");
+            graph g = new graph("graphdata.txt");
+            g.dijkstra();
+        }
+    }
+}
