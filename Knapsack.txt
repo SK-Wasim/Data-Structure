@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp7
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int maxwei = Convert.ToInt32(Console.ReadLine());
+            double sumpoints = 0;
+            double sumwei = 0;
+            double remwei = maxwei;
+
+            double[] weight = {2,3,5,7,1,4,1};
+            double[] points = { 10,5,15,7,6,18,3};
+            double[] calcpoints = new double[weight.Length];
+
+            Random rd = new Random();
+
+            for (int i = 0; i < weight.Length; i++)
+            {
+                calcpoints[i] = double.Parse((points[i] / weight[i]).ToString());
+            }
+
+
+
+            while (sumwei <= maxwei)
+            {
+                int weiinde = 0;
+                double max = calcpoints[0];
+                for (int i = 1; i < weight.Length; i++)
+                {
+                    if (calcpoints[i] > max)
+                    {
+                        max = calcpoints[i];
+                        weiinde = i;
+                    }
+                }
+                if (weight[weiinde] <= remwei)
+                { 
+                    sumpoints = sumpoints + (max * weight[weiinde]);
+                }
+                else
+                {
+                    sumpoints = sumpoints + (max * remwei);
+                }
+                remwei = remwei - weight[weiinde];
+                sumwei = sumwei + weight[weiinde];
+                calcpoints[weiinde] = 0;
+                Console.WriteLine(sumpoints);
+            }
+        }
+    }
+}
